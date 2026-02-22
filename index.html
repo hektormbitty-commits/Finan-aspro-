@@ -42,15 +42,14 @@
   .auth-box input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 14px; padding: 12px 14px; margin-bottom: 14px; outline: none; transition: border-color 0.2s; }
   .auth-box input:focus { border-color: var(--accent); }
 
-  /* Visualizador de senha */
   .pass-wrap { position: relative; margin-bottom: 14px; }
   .pass-wrap input { width: 100%; margin-bottom: 0; padding-right: 44px; }
-  .pass-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); font-size: 18px; line-height: 1; transition: color 0.2s; padding: 4px; }
+  .pass-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); font-size: 18px; line-height: 1; padding: 4px; transition: color 0.2s; }
   .pass-toggle:hover { color: var(--accent); }
 
   .btn-auth { width: 100%; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; padding: 13px; cursor: pointer; transition: opacity 0.2s; margin-top: 6px; }
   .btn-auth:hover { opacity: 0.85; }
-  .auth-error { color: var(--accent2); font-size: 12px; margin-top: 10px; text-align: center; min-height: 16px; }
+  .auth-error { color: var(--accent2); font-size: 12px; margin-top: 10px; text-align: center; min-height: 16px; line-height: 1.5; }
 
   /* ---- APP ---- */
   #app { display: none; }
@@ -64,7 +63,7 @@
 
   .main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
 
-  /* ---- GEMINI BAR ---- */
+  /* ---- GEMINI ---- */
   .ai-bar { background: var(--surface); border: 1px solid var(--accent4); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 24px; position: relative; overflow: hidden; }
   .ai-bar::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(167,139,250,0.04) 0%, transparent 60%); pointer-events: none; }
   .ai-bar-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
@@ -91,10 +90,14 @@
   .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; position: relative; overflow: hidden; transition: transform 0.2s; }
   .summary-card:hover { transform: translateY(-2px); }
   .summary-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-  .summary-card.receitas::before { background: var(--accent); } .summary-card.despesas::before { background: var(--accent2); } .summary-card.saldo::before { background: var(--accent3); }
+  .summary-card.receitas::before { background: var(--accent); }
+  .summary-card.despesas::before { background: var(--accent2); }
+  .summary-card.saldo::before { background: var(--accent3); }
   .summary-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 10px; }
   .summary-value { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -1px; }
-  .summary-card.receitas .summary-value { color: var(--accent); } .summary-card.despesas .summary-value { color: var(--accent2); } .summary-card.saldo .summary-value { color: var(--accent3); }
+  .summary-card.receitas .summary-value { color: var(--accent); }
+  .summary-card.despesas .summary-value { color: var(--accent2); }
+  .summary-card.saldo .summary-value { color: var(--accent3); }
   .summary-icon { position: absolute; right: 20px; top: 20px; font-size: 28px; opacity: 0.12; }
 
   /* ---- LAYOUT ---- */
@@ -106,35 +109,37 @@
   .form-group label { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
   .form-group input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; padding: 10px 12px; outline: none; transition: border-color 0.2s; }
   .form-group input:focus { border-color: var(--accent); }
-
   .tipo-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
   .tipo-btn { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
   .tipo-btn.active-receita { background: rgba(0,229,160,0.12); border-color: var(--accent); color: var(--accent); }
   .tipo-btn.active-despesa { background: rgba(255,77,109,0.12); border-color: var(--accent2); color: var(--accent2); }
-
   .btn-salvar { width: 100%; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; padding: 13px; cursor: pointer; transition: opacity 0.2s; margin-top: 4px; }
   .btn-salvar:hover { opacity: 0.85; }
 
   /* ---- LISTA ---- */
   .lista-wrapper { max-height: 420px; overflow-y: auto; }
-  .lista-wrapper::-webkit-scrollbar { width: 4px; } .lista-wrapper::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .lista-wrapper::-webkit-scrollbar { width: 4px; }
+  .lista-wrapper::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
   .transacao-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); animation: slideUp 0.3s ease; }
   .transacao-item:last-child { border-bottom: none; }
   .t-badge { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-  .t-badge.receita { background: rgba(0,229,160,0.12); } .t-badge.despesa { background: rgba(255,77,109,0.12); }
+  .t-badge.receita { background: rgba(0,229,160,0.12); }
+  .t-badge.despesa { background: rgba(255,77,109,0.12); }
   .t-info { flex: 1; min-width: 0; }
   .t-cat { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .t-desc { font-size: 11px; color: var(--muted); }
   .t-date { font-size: 11px; color: var(--muted); text-align: right; }
   .t-valor { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; text-align: right; min-width: 90px; }
-  .t-valor.receita { color: var(--accent); } .t-valor.despesa { color: var(--accent2); }
+  .t-valor.receita { color: var(--accent); }
+  .t-valor.despesa { color: var(--accent2); }
   .t-actions { display: flex; gap: 6px; }
   .t-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--muted); font-size: 12px; padding: 5px 9px; cursor: pointer; transition: all 0.15s; }
-  .t-btn:hover { color: var(--text); border-color: var(--text); } .t-btn.del:hover { color: var(--accent2); border-color: var(--accent2); }
-
+  .t-btn:hover { color: var(--text); border-color: var(--text); }
+  .t-btn.del:hover { color: var(--accent2); border-color: var(--accent2); }
   .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; }
   .empty-state .emoji { font-size: 36px; margin-bottom: 12px; }
   .chart-container { position: relative; height: 240px; }
+
   .filter-row { display: flex; gap: 8px; margin-bottom: 16px; }
   .filter-chip { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 20px; font-family: 'DM Mono', monospace; font-size: 11px; padding: 5px 12px; cursor: pointer; transition: all 0.15s; }
   .filter-chip.active { background: rgba(0,229,160,0.12); border-color: var(--accent); color: var(--accent); }
@@ -149,9 +154,14 @@
   @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
   @media (max-width: 768px) {
-    .summary-grid { grid-template-columns: 1fr; } .content-grid { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; } .topbar { padding: 14px 16px; } .main { padding: 20px 14px; }
-    .auth-box { width: 92%; padding: 36px 24px; } .summary-value { font-size: 22px; } .ai-bar-sub { display: none; }
+    .summary-grid { grid-template-columns: 1fr; }
+    .content-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .topbar { padding: 14px 16px; }
+    .main { padding: 20px 14px; }
+    .auth-box { width: 92%; padding: 36px 24px; }
+    .summary-value { font-size: 22px; }
+    .ai-bar-sub { display: none; }
   }
 </style>
 </head>
@@ -185,31 +195,29 @@
       <button class="auth-tab" id="tabCadastro" onclick="trocarAba('cadastro')">Criar conta</button>
     </div>
 
-    <!-- FORM LOGIN -->
     <div id="formLogin">
       <label>Email</label>
-      <input type="email" id="loginEmail" placeholder="seu@email.com">
+      <input type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="email">
       <label>Senha</label>
       <div class="pass-wrap">
-        <input type="password" id="loginSenha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()">
-        <button class="pass-toggle" onclick="toggleSenha('loginSenha', this)" tabindex="-1">👁</button>
+        <input type="password" id="loginSenha" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')fazerLogin()">
+        <button class="pass-toggle" onclick="toggleSenha('loginSenha',this)" tabindex="-1">👁</button>
       </div>
       <button class="btn-auth" onclick="fazerLogin()">Entrar →</button>
     </div>
 
-    <!-- FORM CADASTRO -->
     <div id="formCadastro" style="display:none;">
       <label>Email</label>
-      <input type="email" id="cadEmail" placeholder="seu@email.com">
+      <input type="email" id="cadEmail" placeholder="seu@email.com" autocomplete="email">
       <label>Senha (mín. 6 caracteres)</label>
       <div class="pass-wrap">
-        <input type="password" id="cadSenha" placeholder="••••••••">
-        <button class="pass-toggle" onclick="toggleSenha('cadSenha', this)" tabindex="-1">👁</button>
+        <input type="password" id="cadSenha" placeholder="••••••••" autocomplete="new-password">
+        <button class="pass-toggle" onclick="toggleSenha('cadSenha',this)" tabindex="-1">👁</button>
       </div>
       <label>Confirmar senha</label>
       <div class="pass-wrap">
-        <input type="password" id="cadSenha2" placeholder="••••••••">
-        <button class="pass-toggle" onclick="toggleSenha('cadSenha2', this)" tabindex="-1">👁</button>
+        <input type="password" id="cadSenha2" placeholder="••••••••" autocomplete="new-password">
+        <button class="pass-toggle" onclick="toggleSenha('cadSenha2',this)" tabindex="-1">👁</button>
       </div>
       <button class="btn-auth" onclick="fazerCadastro()">Criar conta →</button>
     </div>
@@ -230,8 +238,6 @@
   </div>
 
   <div class="main">
-
-    <!-- GEMINI -->
     <div class="ai-bar">
       <div class="ai-bar-header">
         <div class="ai-badge">✦ GEMINI</div>
@@ -253,7 +259,6 @@
       <div class="ai-response" id="aiResponse"></div>
     </div>
 
-    <!-- RESUMO -->
     <div class="summary-grid">
       <div class="summary-card receitas">
         <div class="summary-icon">↑</div>
@@ -321,12 +326,12 @@
   </div>
 </div>
 
+<!-- visualizador de senha (fora do module) -->
 <script>
-  // Visualizador de senha
-  function toggleSenha(inputId, btn) {
-    const input = document.getElementById(inputId);
-    const mostrar = input.type === 'password';
-    input.type = mostrar ? 'text' : 'password';
+  function toggleSenha(id, btn) {
+    const el = document.getElementById(id);
+    const mostrar = el.type === 'password';
+    el.type = mostrar ? 'text' : 'password';
     btn.textContent = mostrar ? '🙈' : '👁';
   }
 </script>
@@ -336,13 +341,21 @@
   import {
     getAuth, GoogleAuthProvider, signInWithPopup,
     createUserWithEmailAndPassword, signInWithEmailAndPassword,
-    signOut, onAuthStateChanged
+    signOut, onAuthStateChanged,
+    setPersistence, browserLocalPersistence
   } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
   import {
     getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where
   } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
- 
+  // ══════════════════════════════════════════════
+  //  ⚠️  COLE SUA NOVA CHAVE GEMINI ABAIXO
+  // ══════════════════════════════════════════════
+  const GEMINI_KEY = "AIzaSyC7PA3kTiiL3KMK1AGe8wtcOe-T46dJWrg";
+  // ══════════════════════════════════════════════
+
+  const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent?key=" + GEMINI_KEY;
+
   const firebaseConfig = {
     apiKey: "AIzaSyC7PA3kTiiL3KMK1AGe8wtcOe-T46dJWrg",
     authDomain: "financaspro1100.firebaseapp.com",
@@ -352,31 +365,32 @@
     appId: "1:411300706683:web:f1913633000c7f538425de"
   };
 
-  const GEMINI_KEY = "AIzaSyC7PA3kTiiL3KMK1AGe8wtcOe-T46dJWrg"; 
-  const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent?key=" + GEMINI_KEY;
-
   const fireApp = initializeApp(firebaseConfig);
   const auth = getAuth(fireApp);
   const db = getFirestore(fireApp);
   const googleProvider = new GoogleAuthProvider();
 
+  // Mantém sessão mesmo ao sair do app ou fechar o navegador
+  try { await setPersistence(auth, browserLocalPersistence); } catch(e) {}
+
   let transacoes = [], tipoAtual = 'receita', filtroAtual = 'todos';
   let editandoId = null, grafico = null, uidAtual = null;
 
-  window.loginGoogle = loginGoogle;
-  window.trocarAba = trocarAba;
-  window.fazerLogin = fazerLogin;
-  window.fazerCadastro = fazerCadastro;
-  window.fazerLogout = fazerLogout;
-  window.setTipo = setTipo;
-  window.setFiltro = setFiltro;
-  window.salvar = salvar;
-  window.excluir = excluir;
-  window.editar = editar;
-  window.enviarParaIA = enviarParaIA;
-  window.usarExemplo = usarExemplo;
+  // Expor funções globais
+  window.loginGoogle    = loginGoogle;
+  window.trocarAba      = trocarAba;
+  window.fazerLogin     = fazerLogin;
+  window.fazerCadastro  = fazerCadastro;
+  window.fazerLogout    = fazerLogout;
+  window.setTipo        = setTipo;
+  window.setFiltro      = setFiltro;
+  window.salvar         = salvar;
+  window.excluir        = excluir;
+  window.editar         = editar;
+  window.enviarParaIA   = enviarParaIA;
+  window.usarExemplo    = usarExemplo;
 
-  // Observador de autenticação
+  // ── Observador de autenticação ──
   onAuthStateChanged(auth, async (user) => {
     document.getElementById('loading').style.display = 'none';
     if (user) {
@@ -384,8 +398,7 @@
       document.getElementById('emailUsuario').textContent = user.displayName || user.email;
       if (user.photoURL) {
         const av = document.getElementById('avatarImg');
-        av.src = user.photoURL;
-        av.style.display = 'block';
+        av.src = user.photoURL; av.style.display = 'block';
       }
       document.getElementById('authCard').style.display = 'none';
       document.getElementById('app').style.display = 'block';
@@ -395,50 +408,56 @@
       uidAtual = null;
       document.getElementById('app').style.display = 'none';
       document.getElementById('authCard').style.display = 'flex';
+      document.getElementById('avatarImg').style.display = 'none';
     }
   });
 
+  // ── Login Google ──
   async function loginGoogle() {
-    document.getElementById('authErro').textContent = '';
+    setErro('');
     try { await signInWithPopup(auth, googleProvider); }
-    catch(e) { document.getElementById('authErro').textContent = traduzirErro(e.code); }
+    catch(e) { setErro(traduzirErro(e.code)); }
   }
 
+  // ── Trocar aba login / cadastro ──
   function trocarAba(aba) {
-    document.getElementById('formLogin').style.display = aba === 'login' ? 'block' : 'none';
+    document.getElementById('formLogin').style.display    = aba === 'login'    ? 'block' : 'none';
     document.getElementById('formCadastro').style.display = aba === 'cadastro' ? 'block' : 'none';
-    document.getElementById('tabLogin').className = 'auth-tab' + (aba === 'login' ? ' active' : '');
+    document.getElementById('tabLogin').className    = 'auth-tab' + (aba === 'login'    ? ' active' : '');
     document.getElementById('tabCadastro').className = 'auth-tab' + (aba === 'cadastro' ? ' active' : '');
-    document.getElementById('authErro').textContent = '';
+    setErro('');
   }
 
+  // ── Login email/senha ──
   async function fazerLogin() {
     const email = document.getElementById('loginEmail').value.trim();
     const senha = document.getElementById('loginSenha').value;
-    document.getElementById('authErro').textContent = '';
-    if (!email || !senha) { document.getElementById('authErro').textContent = 'Preencha email e senha.'; return; }
+    setErro('');
+    if (!email || !senha) { setErro('Preencha email e senha.'); return; }
     try { await signInWithEmailAndPassword(auth, email, senha); }
-    catch(e) { document.getElementById('authErro').textContent = traduzirErro(e.code); }
+    catch(e) { setErro(traduzirErro(e.code)); }
   }
 
+  // ── Criar conta ──
   async function fazerCadastro() {
-    const email = document.getElementById('cadEmail').value.trim();
-    const senha = document.getElementById('cadSenha').value;
+    const email  = document.getElementById('cadEmail').value.trim();
+    const senha  = document.getElementById('cadSenha').value;
     const senha2 = document.getElementById('cadSenha2').value;
-    document.getElementById('authErro').textContent = '';
-    if (!email || !senha) { document.getElementById('authErro').textContent = 'Preencha todos os campos.'; return; }
-    if (senha !== senha2) { document.getElementById('authErro').textContent = 'As senhas não coincidem.'; return; }
-    if (senha.length < 6) { document.getElementById('authErro').textContent = 'Senha mínima: 6 caracteres.'; return; }
+    setErro('');
+    if (!email || !senha)   { setErro('Preencha todos os campos.'); return; }
+    if (senha !== senha2)   { setErro('As senhas não coincidem.'); return; }
+    if (senha.length < 6)   { setErro('Senha mínima: 6 caracteres.'); return; }
     try { await createUserWithEmailAndPassword(auth, email, senha); showToast('Conta criada com sucesso!'); }
-    catch(e) { document.getElementById('authErro').textContent = traduzirErro(e.code); }
+    catch(e) { setErro(traduzirErro(e.code)); }
   }
 
+  // ── Logout ──
   async function fazerLogout() {
     await signOut(auth);
     transacoes = [];
-    document.getElementById('avatarImg').style.display = 'none';
   }
 
+  // ── Carregar transações do Firestore ──
   async function carregarTransacoes() {
     try {
       const q = query(collection(db, 'transacoes'), where('uid', '==', uidAtual));
@@ -449,15 +468,16 @@
     } catch(e) { showToast('Erro ao carregar dados.', 'erro'); }
   }
 
+  // ── Salvar transação ──
   async function salvar(dadosIA = null) {
     const categoria = dadosIA ? dadosIA.categoria : document.getElementById('categoria').value.trim();
     const descricao = dadosIA ? (dadosIA.descricao || '') : document.getElementById('descricao').value.trim();
-    const valor = dadosIA ? parseFloat(dadosIA.valor) : parseFloat(document.getElementById('valor').value);
-    const data = dadosIA ? dadosIA.data : document.getElementById('data').value;
-    const tipo = dadosIA ? dadosIA.tipo : tipoAtual;
+    const valor     = dadosIA ? parseFloat(dadosIA.valor) : parseFloat(document.getElementById('valor').value);
+    const data      = dadosIA ? dadosIA.data : document.getElementById('data').value;
+    const tipo      = dadosIA ? dadosIA.tipo : tipoAtual;
 
-    if (!valor || valor <= 0) { if (!dadosIA) showToast('Insira um valor válido', 'erro'); return false; }
-    if (!categoria) { if (!dadosIA) showToast('Informe uma categoria', 'erro'); return false; }
+    if (!valor || valor <= 0) { if (!dadosIA) showToast('Insira um valor válido.', 'erro'); return false; }
+    if (!categoria)           { if (!dadosIA) showToast('Informe uma categoria.', 'erro'); return false; }
 
     const item = { uid: uidAtual, tipo, categoria, descricao, valor, data, criadoEm: Date.now() };
     try {
@@ -476,29 +496,31 @@
     } catch(e) { showToast('Erro ao salvar.', 'erro'); return false; }
   }
 
+  // ── Excluir transação ──
   async function excluir(id) {
     if (!confirm('Excluir esta transação?')) return;
     try {
       await deleteDoc(doc(db, 'transacoes', id));
       transacoes = transacoes.filter(t => t.id !== id);
-      atualizar(); showToast('Transação excluída');
+      atualizar(); showToast('Transação excluída.');
     } catch(e) { showToast('Erro ao excluir.', 'erro'); }
   }
 
+  // ── Editar transação ──
   function editar(id) {
     const t = transacoes.find(t => t.id === id);
     if (!t) return;
     editandoId = id; setTipo(t.tipo);
     document.getElementById('categoria').value = t.categoria;
     document.getElementById('descricao').value = t.descricao || '';
-    document.getElementById('valor').value = t.valor;
-    document.getElementById('data').value = t.data;
-    document.getElementById('formTitle').textContent = 'Editar Transação';
-    document.getElementById('btnSalvar').textContent = 'Atualizar';
+    document.getElementById('valor').value     = t.valor;
+    document.getElementById('data').value      = t.data;
+    document.getElementById('formTitle').textContent  = 'Editar Transação';
+    document.getElementById('btnSalvar').textContent  = 'Atualizar';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ---- GEMINI ----
+  // ── GEMINI ──
   function usarExemplo(el) {
     document.getElementById('aiInput').value = el.textContent;
     document.getElementById('aiInput').focus();
@@ -509,38 +531,34 @@
     if (!input) return;
 
     if (GEMINI_KEY === 'SUA_CHAVE_GEMINI_AQUI') {
-      document.getElementById('aiResponse').className = 'ai-response visible';
-      document.getElementById('aiResponse').innerHTML = '⚠️ Insira sua chave do Gemini no arquivo (procure por SUA_CHAVE_GEMINI_AQUI).';
+      mostrarResposta('⚠️ Insira sua chave do Gemini no arquivo (procure por SUA_CHAVE_GEMINI_AQUI).');
       return;
     }
 
     const btn = document.getElementById('btnAI');
-    const respDiv = document.getElementById('aiResponse');
     btn.disabled = true; btn.textContent = '...';
-    respDiv.className = 'ai-response visible';
-    respDiv.innerHTML = '<div class="ai-thinking">Gemini pensando <div class="ai-dots"><span></span><span></span><span></span></div></div>';
+    mostrarResposta('<div class="ai-thinking">Gemini pensando <div class="ai-dots"><span></span><span></span><span></span></div></div>');
 
-    const hoje = new Date().toISOString().split('T')[0];
-    const totalR = transacoes.filter(t => t.tipo === 'receita').reduce((s, t) => s + t.valor, 0);
-    const totalD = transacoes.filter(t => t.tipo === 'despesa').reduce((s, t) => s + t.valor, 0);
+    const hoje   = new Date().toISOString().split('T')[0];
+    const totalR = transacoes.filter(t => t.tipo === 'receita').reduce((s,t) => s + t.valor, 0);
+    const totalD = transacoes.filter(t => t.tipo === 'despesa').reduce((s,t) => s + t.valor, 0);
     const resumo = transacoes.slice(0, 25).map(t => `${t.tipo}|${t.categoria}|R$${t.valor}|${t.data}`).join('\n');
 
-    const prompt = `Você é um assistente financeiro pessoal integrado ao FinançasPRO. Responda SEMPRE em português brasileiro de forma simples e direta.
+    const prompt = `Você é um assistente financeiro pessoal integrado ao FinançasPRO. Responda SEMPRE em português brasileiro simples e direto.
 
 DADOS DO USUÁRIO:
 - Hoje: ${hoje}
-- Total Receitas: R$ ${totalR.toFixed(2)}
-- Total Despesas: R$ ${totalD.toFixed(2)}
-- Saldo atual: R$ ${(totalR - totalD).toFixed(2)}
+- Receitas: R$ ${totalR.toFixed(2)}
+- Despesas: R$ ${totalD.toFixed(2)}
+- Saldo: R$ ${(totalR - totalD).toFixed(2)}
 Últimas transações (tipo|categoria|valor|data):
 ${resumo || 'Nenhuma transação ainda.'}
 
-INSTRUÇÕES:
-1. Se o usuário quiser ADICIONAR uma transação (gastei, paguei, recebi, comprei, ganhei, etc.), responda APENAS com este JSON válido, sem nenhum texto antes ou depois:
+REGRAS:
+1. Se o usuário quiser ADICIONAR transação (gastei, paguei, recebi, comprei, ganhei etc.), responda SOMENTE com este JSON exato, sem texto antes ou depois:
 {"acao":"adicionar","tipo":"despesa","categoria":"Alimentação","descricao":"iFood","valor":45.00,"data":"${hoje}","resposta":"Despesa de R$ 45,00 no iFood adicionada!"}
 
 2. Se for PERGUNTA sobre finanças, responda em texto simples e útil.
-
 3. Se não entender, peça esclarecimento.
 
 MENSAGEM: "${input}"`;
@@ -557,15 +575,15 @@ MENSAGEM: "${input}"`;
 
       if (!res.ok) {
         const err = await res.json();
-        respDiv.innerHTML = '⚠️ Erro da API: ' + (err.error?.message || 'Verifique sua chave do Gemini.');
+        mostrarResposta('⚠️ Erro da API Gemini: ' + (err.error?.message || 'Verifique sua chave.'));
         btn.disabled = false; btn.textContent = '✦ Enviar';
         return;
       }
 
-      const data = await res.json();
+      const data  = await res.json();
       const texto = (data.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
-
       const jsonMatch = texto.match(/\{[\s\S]*?\}/);
+
       if (jsonMatch) {
         try {
           const obj = JSON.parse(jsonMatch[0]);
@@ -577,27 +595,25 @@ MENSAGEM: "${input}"`;
               valor: parseFloat(obj.valor),
               data: obj.data || hoje
             });
-            respDiv.innerHTML = ok
-              ? '✦ ' + (obj.resposta || 'Transação adicionada!')
-              : '⚠️ Não consegui salvar. Tente novamente.';
+            mostrarResposta(ok ? '✦ ' + (obj.resposta || 'Transação adicionada!') : '⚠️ Não consegui salvar. Tente novamente.');
             if (ok) showToast('Gemini adicionou a transação!', 'ia');
           } else {
-            respDiv.innerHTML = texto.replace(/\n/g, '<br>');
+            mostrarResposta(texto.replace(/\n/g, '<br>'));
           }
-        } catch { respDiv.innerHTML = texto.replace(/\n/g, '<br>'); }
+        } catch { mostrarResposta(texto.replace(/\n/g, '<br>')); }
       } else {
-        respDiv.innerHTML = texto.replace(/\n/g, '<br>');
+        mostrarResposta(texto.replace(/\n/g, '<br>'));
       }
 
       document.getElementById('aiInput').value = '';
     } catch(e) {
-      respDiv.innerHTML = '⚠️ Erro de conexão. Verifique sua internet.';
+      mostrarResposta('⚠️ Erro de conexão. Verifique sua internet.');
     }
 
     btn.disabled = false; btn.textContent = '✦ Enviar';
   }
 
-  // ---- UTILS ----
+  // ── Utils ──
   function setTipo(tipo) {
     tipoAtual = tipo;
     document.getElementById('btnReceita').className = 'tipo-btn' + (tipo === 'receita' ? ' active-receita' : '');
@@ -611,10 +627,18 @@ MENSAGEM: "${input}"`;
   }
 
   function limparForm() {
-    document.getElementById('categoria').value = '';
-    document.getElementById('descricao').value = '';
-    document.getElementById('valor').value = '';
+    ['categoria','descricao','valor'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('data').valueAsDate = new Date();
+  }
+
+  function mostrarResposta(html) {
+    const el = document.getElementById('aiResponse');
+    el.className = 'ai-response visible';
+    el.innerHTML = html;
+  }
+
+  function setErro(msg) {
+    document.getElementById('authErro').textContent = msg;
   }
 
   function atualizar() {
@@ -641,7 +665,7 @@ MENSAGEM: "${input}"`;
       lista.innerHTML = '<div class="empty-state"><div class="emoji">📊</div>Nenhuma transação ainda.<br>Use o formulário ou peça ao Gemini!</div>';
       return;
     }
-    const fmt = n => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const fmt     = n => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('pt-BR') : '';
     lista.innerHTML = filtered.map(t => `
       <div class="transacao-item">
@@ -683,19 +707,20 @@ MENSAGEM: "${input}"`;
 
   function traduzirErro(code) {
     const erros = {
-      'auth/user-not-found': 'Usuário não encontrado.',
-      'auth/wrong-password': 'Senha incorreta.',
-      'auth/invalid-email': 'Email inválido.',
-      'auth/email-already-in-use': 'Este email já está cadastrado.',
-      'auth/weak-password': 'Senha muito fraca.',
-      'auth/invalid-credential': 'Email ou senha incorretos.',
-      'auth/too-many-requests': 'Muitas tentativas. Tente mais tarde.',
-      'auth/network-request-failed': 'Erro de conexão.',
-      'auth/popup-closed-by-user': 'Login cancelado.',
-      'auth/cancelled-popup-request': 'Login cancelado.',
-      'auth/unauthorized-domain': 'Domínio não autorizado. Adicione hektormbitty-commits.github.io no Firebase.',
+      'auth/user-not-found':            'Usuário não encontrado.',
+      'auth/wrong-password':            'Senha incorreta.',
+      'auth/invalid-email':             'Email inválido.',
+      'auth/email-already-in-use':      'Este email já está cadastrado.',
+      'auth/weak-password':             'Senha muito fraca.',
+      'auth/invalid-credential':        'Email ou senha incorretos.',
+      'auth/too-many-requests':         'Muitas tentativas. Tente mais tarde.',
+      'auth/network-request-failed':    'Erro de conexão. Verifique sua internet.',
+      'auth/popup-closed-by-user':      'Login cancelado.',
+      'auth/cancelled-popup-request':   'Login cancelado.',
+      'auth/unauthorized-domain':       'Domínio não autorizado. Adicione hektormbitty-commits.github.io no Firebase → Authentication → Settings → Domínios autorizados.',
+      'auth/operation-not-allowed':     'Este método de login não está ativado. Ative Email/Senha no Firebase → Authentication → Sign-in method.',
     };
-    return erros[code] || 'Erro: ' + code;
+    return erros[code] || 'Erro (' + code + '). Tente novamente.';
   }
 
   function showToast(msg, tipo = '') {
