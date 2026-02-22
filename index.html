@@ -63,27 +63,6 @@
 
   .main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
 
-  /* ---- GEMINI ---- */
-  .ai-bar { background: var(--surface); border: 1px solid var(--accent4); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 24px; position: relative; overflow: hidden; }
-  .ai-bar::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(167,139,250,0.04) 0%, transparent 60%); pointer-events: none; }
-  .ai-bar-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-  .ai-badge { background: linear-gradient(135deg, #a78bfa, #60a5fa); border-radius: 6px; padding: 4px 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 11px; color: #000; }
-  .ai-bar-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); }
-  .ai-bar-sub { font-size: 11px; color: var(--muted); margin-left: auto; }
-  .ai-input-row { display: flex; gap: 10px; }
-  .ai-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; padding: 11px 14px; outline: none; transition: border-color 0.2s; }
-  .ai-input:focus { border-color: var(--accent4); }
-  .ai-input::placeholder { color: var(--muted); }
-  .btn-ai { background: linear-gradient(135deg, #a78bfa, #60a5fa); color: #000; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; padding: 11px 20px; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; }
-  .btn-ai:hover { opacity: 0.85; } .btn-ai:disabled { opacity: 0.5; cursor: not-allowed; }
-  .ai-examples { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-  .ai-example { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; font-size: 11px; color: var(--muted); padding: 5px 12px; cursor: pointer; transition: all 0.15s; }
-  .ai-example:hover { color: var(--accent4); border-color: var(--accent4); }
-  .ai-response { margin-top: 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-size: 13px; color: var(--text); line-height: 1.6; display: none; }
-  .ai-response.visible { display: block; animation: slideUp 0.3s ease; }
-  .ai-thinking { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
-  .ai-dots span { display: inline-block; width: 5px; height: 5px; background: var(--accent4); border-radius: 50%; animation: bounce 1s infinite; }
-  .ai-dots span:nth-child(2) { animation-delay: 0.15s; } .ai-dots span:nth-child(3) { animation-delay: 0.3s; }
 
   /* ---- SUMMARY ---- */
   .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
@@ -521,32 +500,6 @@
     document.getElementById('btnSalvar').textContent  = 'Atualizar';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
-  // ── GEMINI ──
-  function usarExemplo(el) {
-    document.getElementById('aiInput').value = el.textContent;
-    document.getElementById('aiInput').focus();
-  }
-
-  async function enviarParaIA() {
-    const input = document.getElementById('aiInput').value.trim();
-    if (!input) return;
-
-    if (GEMINI_KEY === 'AIzaSyC7PA3kTiiL3KMK1AGe8wtcOe-T46dJWrg') {
-      mostrarResposta( (AIzaSyC7PA3kTiiL3KMK1AGe8wtcOe-T46dJWrg).');
-      return;
-    }
-
-    const btn = document.getElementById('btnAI');
-    btn.disabled = true; btn.textContent = '...';
-    mostrarResposta('<div class="ai-thinking">Gemini pensando <div class="ai-dots"><span></span><span></span><span></span></div></div>');
-
-    const hoje   = new Date().toISOString().split('T')[0];
-    const totalR = transacoes.filter(t => t.tipo === 'receita').reduce((s,t) => s + t.valor, 0);
-    const totalD = transacoes.filter(t => t.tipo === 'despesa').reduce((s,t) => s + t.valor, 0);
-    const resumo = transacoes.slice(0, 25).map(t => `${t.tipo}|${t.categoria}|R$${t.valor}|${t.data}`).join('\n');
-
-    const prompt = `Você é um assistente financeiro pessoal integrado ao FinançasPRO. Responda SEMPRE em português brasileiro simples e direto.
 
 DADOS DO USUÁRIO:
 - Hoje: ${hoje}
