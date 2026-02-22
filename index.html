@@ -339,7 +339,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
   import {
-    getAuth, GoogleAuthProvider, signInWithPopup,
+    getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult,
     createUserWithEmailAndPassword, signInWithEmailAndPassword,
     signOut, onAuthStateChanged,
     setPersistence, browserLocalPersistence
@@ -348,11 +348,7 @@
     getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where
   } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-  // ══════════════════════════════════════════════
-  //  ⚠️  COLE SUA NOVA CHAVE GEMINI ABAIXO
-  // ══════════════════════════════════════════════
   const GEMINI_KEY = "AIzaSyC7PA3kTiiL3KMK1AGe8wtcOe-T46dJWrg";
-  // ══════════════════════════════════════════════
 
   const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent?key=" + GEMINI_KEY;
 
@@ -372,6 +368,12 @@
 
   // Mantém sessão mesmo ao sair do app ou fechar o navegador
   try { await setPersistence(auth, browserLocalPersistence); } catch(e) {}
+
+  // Captura resultado do redirect do Google ao voltar para o app
+  try {
+    const result = await getRedirectResult(auth);
+    if (result?.user) showToast('Login com Google realizado!');
+  } catch(e) { /* ignora se não houve redirect */ }
 
   let transacoes = [], tipoAtual = 'receita', filtroAtual = 'todos';
   let editandoId = null, grafico = null, uidAtual = null;
@@ -415,7 +417,7 @@
   // ── Login Google ──
   async function loginGoogle() {
     setErro('');
-    try { await signInWithPopup(auth, googleProvider); }
+    try { await signInWithRedirect(auth, googleProvider); }
     catch(e) { setErro(traduzirErro(e.code)); }
   }
 
@@ -530,8 +532,8 @@
     const input = document.getElementById('aiInput').value.trim();
     if (!input) return;
 
-    if (GEMINI_KEY === 'SUA_CHAVE_GEMINI_AQUI') {
-      mostrarResposta('⚠️ Insira sua chave do Gemini no arquivo (procure por SUA_CHAVE_GEMINI_AQUI).');
+    if (GEMINI_KEY === 'AIzaSyC7PA3kTiiL3KMK1AGe8wtcOe-T46dJWrg') {
+      mostrarResposta( (AIzaSyC7PA3kTiiL3KMK1AGe8wtcOe-T46dJWrg).');
       return;
     }
 
