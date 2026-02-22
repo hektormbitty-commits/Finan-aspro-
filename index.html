@@ -8,451 +8,177 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #0a0c0f;
-    --surface: #111418;
-    --surface2: #181c22;
-    --border: #252a32;
-    --accent: #00e5a0;
-    --accent2: #ff4d6d;
-    --accent3: #ffd166;
-    --text: #e8ecf0;
-    --muted: #5a6370;
-    --radius: 12px;
+    --bg: #0a0c0f; --surface: #111418; --surface2: #181c22;
+    --border: #252a32; --accent: #00e5a0; --accent2: #ff4d6d;
+    --accent3: #ffd166; --accent4: #a78bfa; --text: #e8ecf0; --muted: #5a6370; --radius: 12px;
   }
+  body { font-family: 'DM Mono', monospace; background: var(--bg); color: var(--text); min-height: 100vh; }
+  .loading-overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 16px; }
+  .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  .loading-text { font-size: 13px; color: var(--muted); }
 
-  body {
-    font-family: 'DM Mono', monospace;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 0;
-  }
+  #authCard { min-height: 100vh; display: none; align-items: center; justify-content: center; background: var(--bg); position: relative; overflow: hidden; }
+  #authCard::before { content: ''; position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,229,160,0.08) 0%, transparent 70%); top: -150px; left: -150px; pointer-events: none; }
+  #authCard::after { content: ''; position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(167,139,250,0.06) 0%, transparent 70%); bottom: -100px; right: -100px; pointer-events: none; }
 
-  /* ---- LOGIN ---- */
-  #loginCard {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg);
-    position: relative;
-    overflow: hidden;
-  }
-  #loginCard::before {
-    content: '';
-    position: absolute;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(0,229,160,0.08) 0%, transparent 70%);
-    top: -150px; left: -150px;
-    pointer-events: none;
-  }
-  #loginCard::after {
-    content: '';
-    position: absolute;
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(255,77,109,0.06) 0%, transparent 70%);
-    bottom: -100px; right: -100px;
-    pointer-events: none;
-  }
+  .auth-box { width: 400px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 48px 40px; position: relative; z-index: 1; animation: slideUp 0.6s ease; }
+  .auth-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; color: var(--accent); margin-bottom: 6px; letter-spacing: -1px; }
+  .auth-sub { color: var(--muted); font-size: 12px; margin-bottom: 28px; }
 
-  .login-box {
-    width: 380px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 48px 40px;
-    position: relative;
-    z-index: 1;
-    animation: slideUp 0.6s ease;
-  }
-  .login-logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 28px;
-    color: var(--accent);
-    margin-bottom: 6px;
-    letter-spacing: -1px;
-  }
-  .login-sub {
-    color: var(--muted);
-    font-size: 12px;
-    margin-bottom: 36px;
-  }
-  .login-box label {
-    display: block;
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-  }
-  .login-box input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 14px;
-    padding: 12px 14px;
-    margin-bottom: 20px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .login-box input:focus { border-color: var(--accent); }
-  .btn-login {
-    width: 100%;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    padding: 14px;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-    margin-top: 4px;
-  }
-  .btn-login:hover { opacity: 0.85; }
-  .btn-login:active { transform: scale(0.98); }
+  .btn-google { width: 100%; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14px; padding: 13px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px; }
+  .btn-google:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* ---- APP ---- */
+  .divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--muted); font-size: 11px; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .auth-tab { padding: 9px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+  .auth-tab.active { background: rgba(0,229,160,0.12); border-color: var(--accent); color: var(--accent); }
+
+  .auth-box label { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .auth-box input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 14px; padding: 12px 14px; margin-bottom: 14px; outline: none; transition: border-color 0.2s; }
+  .auth-box input:focus { border-color: var(--accent); }
+  .btn-auth { width: 100%; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; padding: 13px; cursor: pointer; transition: opacity 0.2s; margin-top: 2px; }
+  .btn-auth:hover { opacity: 0.85; }
+  .auth-error { color: var(--accent2); font-size: 12px; margin-top: 10px; text-align: center; min-height: 16px; }
+
   #app { display: none; }
-
-  .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 32px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .topbar-logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 20px;
-    color: var(--accent);
-    letter-spacing: -1px;
-  }
-  .topbar-user {
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .topbar-user span { color: var(--text); }
-  .btn-logout {
-    background: var(--surface2);
-    color: var(--muted);
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    padding: 7px 14px;
-    cursor: pointer;
-    transition: color 0.2s, border-color 0.2s;
-    margin-left: 16px;
-  }
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 100; }
+  .topbar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--accent); letter-spacing: -1px; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .topbar-avatar { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--accent); }
+  .topbar-user { font-size: 11px; color: var(--muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .btn-logout { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); border-radius: 7px; font-family: 'DM Mono', monospace; font-size: 12px; padding: 7px 14px; cursor: pointer; transition: all 0.2s; }
   .btn-logout:hover { color: var(--accent2); border-color: var(--accent2); }
 
-  .main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 32px 24px;
-  }
+  .main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
 
-  /* ---- CARDS SUMMARY ---- */
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 28px;
-  }
-  .summary-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px 24px;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.2s;
-  }
+  .ai-bar { background: var(--surface); border: 1px solid var(--accent4); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 24px; position: relative; overflow: hidden; }
+  .ai-bar::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(167,139,250,0.04) 0%, transparent 60%); pointer-events: none; }
+  .ai-bar-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .ai-badge { background: linear-gradient(135deg, #a78bfa, #60a5fa); border-radius: 6px; padding: 4px 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 11px; color: #000; }
+  .ai-bar-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); }
+  .ai-bar-sub { font-size: 11px; color: var(--muted); margin-left: auto; }
+  .ai-input-row { display: flex; gap: 10px; }
+  .ai-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; padding: 11px 14px; outline: none; transition: border-color 0.2s; }
+  .ai-input:focus { border-color: var(--accent4); }
+  .ai-input::placeholder { color: var(--muted); }
+  .btn-ai { background: linear-gradient(135deg, #a78bfa, #60a5fa); color: #000; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; padding: 11px 20px; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; }
+  .btn-ai:hover { opacity: 0.85; } .btn-ai:disabled { opacity: 0.5; cursor: not-allowed; }
+  .ai-examples { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .ai-example { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; font-size: 11px; color: var(--muted); padding: 5px 12px; cursor: pointer; transition: all 0.15s; }
+  .ai-example:hover { color: var(--accent4); border-color: var(--accent4); }
+  .ai-response { margin-top: 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-size: 13px; color: var(--text); line-height: 1.6; display: none; }
+  .ai-response.visible { display: block; animation: slideUp 0.3s ease; }
+  .ai-thinking { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
+  .ai-dots span { display: inline-block; width: 5px; height: 5px; background: var(--accent4); border-radius: 50%; animation: bounce 1s infinite; }
+  .ai-dots span:nth-child(2) { animation-delay: 0.15s; } .ai-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+  .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; position: relative; overflow: hidden; transition: transform 0.2s; }
   .summary-card:hover { transform: translateY(-2px); }
-  .summary-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-  }
-  .summary-card.receitas::before { background: var(--accent); }
-  .summary-card.despesas::before { background: var(--accent2); }
-  .summary-card.saldo::before { background: var(--accent3); }
-  .summary-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--muted);
-    margin-bottom: 10px;
-  }
-  .summary-value {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 28px;
-    letter-spacing: -1px;
-  }
-  .summary-card.receitas .summary-value { color: var(--accent); }
-  .summary-card.despesas .summary-value { color: var(--accent2); }
-  .summary-card.saldo .summary-value { color: var(--accent3); }
-  .summary-icon {
-    position: absolute;
-    right: 20px; top: 20px;
-    font-size: 28px;
-    opacity: 0.12;
-  }
+  .summary-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .summary-card.receitas::before { background: var(--accent); } .summary-card.despesas::before { background: var(--accent2); } .summary-card.saldo::before { background: var(--accent3); }
+  .summary-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 10px; }
+  .summary-value { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -1px; }
+  .summary-card.receitas .summary-value { color: var(--accent); } .summary-card.despesas .summary-value { color: var(--accent2); } .summary-card.saldo .summary-value { color: var(--accent3); }
+  .summary-icon { position: absolute; right: 20px; top: 20px; font-size: 28px; opacity: 0.12; }
 
-  /* ---- LAYOUT 2 colunas ---- */
-  .content-grid {
-    display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: 20px;
-    align-items: start;
-  }
-
-  /* ---- FORM ---- */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-  .card-title {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    margin-bottom: 20px;
-    color: var(--text);
-  }
-
+  .content-grid { display: grid; grid-template-columns: 1fr 380px; gap: 20px; align-items: start; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
+  .card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 20px; color: var(--text); }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .form-group { margin-bottom: 14px; }
-  .form-group label {
-    display: block;
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-  }
-  .form-group input,
-  .form-group select {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    padding: 10px 12px;
-    outline: none;
-    transition: border-color 0.2s;
-    appearance: none;
-  }
-  .form-group input:focus,
-  .form-group select:focus { border-color: var(--accent); }
-  .form-group select option { background: var(--surface2); }
-
-  .tipo-toggle {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  .tipo-btn {
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--muted);
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-  }
-  .tipo-btn.active-receita {
-    background: rgba(0,229,160,0.12);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-  .tipo-btn.active-despesa {
-    background: rgba(255,77,109,0.12);
-    border-color: var(--accent2);
-    color: var(--accent2);
-  }
-
-  .btn-salvar {
-    width: 100%;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    padding: 13px;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-    margin-top: 4px;
-  }
+  .form-group label { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .form-group input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; padding: 10px 12px; outline: none; transition: border-color 0.2s; }
+  .form-group input:focus { border-color: var(--accent); }
+  .tipo-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .tipo-btn { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+  .tipo-btn.active-receita { background: rgba(0,229,160,0.12); border-color: var(--accent); color: var(--accent); }
+  .tipo-btn.active-despesa { background: rgba(255,77,109,0.12); border-color: var(--accent2); color: var(--accent2); }
+  .btn-salvar { width: 100%; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; padding: 13px; cursor: pointer; transition: opacity 0.2s; margin-top: 4px; }
   .btn-salvar:hover { opacity: 0.85; }
-  .btn-salvar:active { transform: scale(0.99); }
-
-  /* ---- LISTA ---- */
   .lista-wrapper { max-height: 420px; overflow-y: auto; }
-  .lista-wrapper::-webkit-scrollbar { width: 4px; }
-  .lista-wrapper::-webkit-scrollbar-track { background: transparent; }
-  .lista-wrapper::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  .transacao-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border);
-    animation: slideUp 0.3s ease;
-  }
+  .lista-wrapper::-webkit-scrollbar { width: 4px; } .lista-wrapper::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .transacao-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); animation: slideUp 0.3s ease; }
   .transacao-item:last-child { border-bottom: none; }
-  .t-badge {
-    width: 36px; height: 36px;
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-  .t-badge.receita { background: rgba(0,229,160,0.12); }
-  .t-badge.despesa { background: rgba(255,77,109,0.12); }
+  .t-badge { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .t-badge.receita { background: rgba(0,229,160,0.12); } .t-badge.despesa { background: rgba(255,77,109,0.12); }
   .t-info { flex: 1; min-width: 0; }
-  .t-cat {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .t-desc {
-    font-size: 11px;
-    color: var(--muted);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
+  .t-cat { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .t-desc { font-size: 11px; color: var(--muted); }
   .t-date { font-size: 11px; color: var(--muted); text-align: right; }
-  .t-valor {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    text-align: right;
-    min-width: 90px;
-  }
-  .t-valor.receita { color: var(--accent); }
-  .t-valor.despesa { color: var(--accent2); }
+  .t-valor { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; text-align: right; min-width: 90px; }
+  .t-valor.receita { color: var(--accent); } .t-valor.despesa { color: var(--accent2); }
   .t-actions { display: flex; gap: 6px; }
-  .t-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--muted);
-    font-size: 12px;
-    padding: 5px 9px;
-    cursor: pointer;
-    transition: all 0.15s;
-    font-family: 'DM Mono', monospace;
-  }
-  .t-btn:hover { color: var(--text); border-color: var(--text); }
-  .t-btn.del:hover { color: var(--accent2); border-color: var(--accent2); }
-
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--muted);
-    font-size: 13px;
-  }
+  .t-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--muted); font-size: 12px; padding: 5px 9px; cursor: pointer; transition: all 0.15s; }
+  .t-btn:hover { color: var(--text); border-color: var(--text); } .t-btn.del:hover { color: var(--accent2); border-color: var(--accent2); }
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; }
   .empty-state .emoji { font-size: 36px; margin-bottom: 12px; }
+  .chart-container { position: relative; height: 240px; }
+  .filter-row { display: flex; gap: 8px; margin-bottom: 16px; }
+  .filter-chip { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 20px; font-family: 'DM Mono', monospace; font-size: 11px; padding: 5px 12px; cursor: pointer; transition: all 0.15s; }
+  .filter-chip.active { background: rgba(0,229,160,0.12); border-color: var(--accent); color: var(--accent); }
+  .toast { position: fixed; bottom: 28px; right: 28px; background: var(--surface2); border: 1px solid var(--accent); border-radius: 10px; padding: 14px 20px; font-size: 13px; color: var(--accent); z-index: 9999; animation: slideUp 0.3s ease; box-shadow: 0 8px 32px rgba(0,229,160,0.15); }
+  .toast.erro { border-color: var(--accent2); color: var(--accent2); box-shadow: none; }
+  .toast.ia { border-color: var(--accent4); color: var(--accent4); box-shadow: none; }
 
-  /* ---- GRAFICO ---- */
-  .chart-container {
-    position: relative;
-    height: 240px;
-  }
-
-  /* ---- FILTRO ---- */
-  .filter-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  .filter-chip {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    border-radius: 20px;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    padding: 5px 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .filter-chip.active {
-    background: rgba(0,229,160,0.12);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  /* ---- UTILS ---- */
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .toast {
-    position: fixed;
-    bottom: 28px; right: 28px;
-    background: var(--surface2);
-    border: 1px solid var(--accent);
-    border-radius: 10px;
-    padding: 14px 20px;
-    font-size: 13px;
-    color: var(--accent);
-    z-index: 999;
-    animation: slideUp 0.3s ease;
-    box-shadow: 0 8px 32px rgba(0,229,160,0.15);
-  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes bounce { 0%,80%,100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
   @media (max-width: 768px) {
-    .summary-grid { grid-template-columns: 1fr; }
-    .content-grid { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-    .topbar { padding: 14px 16px; }
-    .main { padding: 20px 14px; }
-    .login-box { width: 90%; padding: 36px 28px; }
+    .summary-grid { grid-template-columns: 1fr; } .content-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; } .topbar { padding: 14px 16px; } .main { padding: 20px 14px; }
+    .auth-box { width: 92%; padding: 36px 24px; } .summary-value { font-size: 22px; } .ai-bar-sub { display: none; }
   }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="loginCard">
-  <div class="login-box">
-    <div class="login-logo">FinançasPRO</div>
-    <div class="login-sub">Controle financeiro inteligente</div>
-    <label>Usuário</label>
-    <input id="usuario" placeholder="seu_usuario" autocomplete="username">
-    <label>Senha</label>
-    <input id="senha" type="password" placeholder="••••••••" autocomplete="current-password">
-    <button class="btn-login" onclick="login()">Entrar →</button>
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">Carregando...</div>
+</div>
+
+<!-- AUTH -->
+<div id="authCard">
+  <div class="auth-box">
+    <div class="auth-logo">FinançasPRO</div>
+    <div class="auth-sub">Controle financeiro com IA 🤖</div>
+
+    <button class="btn-google" onclick="loginGoogle()">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Entrar com Google
+    </button>
+
+    <div class="divider">ou use email</div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="trocarAba('login')">Entrar</button>
+      <button class="auth-tab" id="tabCadastro" onclick="trocarAba('cadastro')">Criar conta</button>
+    </div>
+
+    <div id="formLogin">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="seu@email.com">
+      <label>Senha</label>
+      <input type="password" id="loginSenha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()">
+      <button class="btn-auth" onclick="fazerLogin()">Entrar →</button>
+    </div>
+
+    <div id="formCadastro" style="display:none;">
+      <label>Email</label>
+      <input type="email" id="cadEmail" placeholder="seu@email.com">
+      <label>Senha (mín. 6 caracteres)</label>
+      <input type="password" id="cadSenha" placeholder="••••••••">
+      <label>Confirmar senha</label>
+      <input type="password" id="cadSenha2" placeholder="••••••••">
+      <button class="btn-auth" onclick="fazerCadastro()">Criar conta →</button>
+    </div>
+
+    <div class="auth-error" id="authErro"></div>
   </div>
 </div>
 
@@ -460,15 +186,35 @@
 <div id="app">
   <div class="topbar">
     <div class="topbar-logo">FinançasPRO</div>
-    <div style="display:flex;align-items:center;gap:8px;">
-      <div class="topbar-user">Olá, <span id="nomeUsuario"></span></div>
-      <button class="btn-logout" onclick="logout()">Sair</button>
+    <div class="topbar-right">
+      <img id="avatarImg" class="topbar-avatar" src="" style="display:none">
+      <div class="topbar-user" id="emailUsuario"></div>
+      <button class="btn-logout" onclick="fazerLogout()">Sair</button>
     </div>
   </div>
 
   <div class="main">
+    <div class="ai-bar">
+      <div class="ai-bar-header">
+        <div class="ai-badge">✦ GEMINI</div>
+        <div class="ai-bar-title">Assistente Financeiro</div>
+        <div class="ai-bar-sub">Fale em português natural</div>
+      </div>
+      <div class="ai-input-row">
+        <input class="ai-input" id="aiInput" placeholder="Ex: Gastei 45 reais no iFood hoje..." onkeydown="if(event.key==='Enter')enviarParaIA()">
+        <button class="btn-ai" id="btnAI" onclick="enviarParaIA()">✦ Enviar</button>
+      </div>
+      <div class="ai-examples">
+        <span class="ai-example" onclick="usarExemplo(this)">Gastei 45 no iFood</span>
+        <span class="ai-example" onclick="usarExemplo(this)">Recebi salário de 3000</span>
+        <span class="ai-example" onclick="usarExemplo(this)">Paguei 120 de luz</span>
+        <span class="ai-example" onclick="usarExemplo(this)">Quanto gastei esse mês?</span>
+        <span class="ai-example" onclick="usarExemplo(this)">Qual meu saldo?</span>
+        <span class="ai-example" onclick="usarExemplo(this)">Onde gasto mais?</span>
+      </div>
+      <div class="ai-response" id="aiResponse"></div>
+    </div>
 
-    <!-- SUMMARY -->
     <div class="summary-grid">
       <div class="summary-card receitas">
         <div class="summary-icon">↑</div>
@@ -488,39 +234,28 @@
     </div>
 
     <div class="content-grid">
-
-      <!-- ESQUERDA: lista + gráfico -->
       <div>
         <div class="card">
           <div class="card-title">Transações</div>
           <div class="filter-row">
-            <button class="filter-chip active" onclick="setFiltro('todos', this)">Todos</button>
-            <button class="filter-chip" onclick="setFiltro('receita', this)">Receitas</button>
-            <button class="filter-chip" onclick="setFiltro('despesa', this)">Despesas</button>
+            <button class="filter-chip active" onclick="setFiltro('todos',this)">Todos</button>
+            <button class="filter-chip" onclick="setFiltro('receita',this)">Receitas</button>
+            <button class="filter-chip" onclick="setFiltro('despesa',this)">Despesas</button>
           </div>
-          <div class="lista-wrapper">
-            <div id="lista"></div>
-          </div>
+          <div class="lista-wrapper"><div id="lista"></div></div>
         </div>
-
         <div class="card">
           <div class="card-title">Gastos por Categoria</div>
-          <div class="chart-container">
-            <canvas id="grafico"></canvas>
-          </div>
+          <div class="chart-container"><canvas id="grafico"></canvas></div>
         </div>
       </div>
-
-      <!-- DIREITA: form -->
       <div>
         <div class="card" style="position:sticky;top:80px;">
           <div class="card-title" id="formTitle">Nova Transação</div>
-
           <div class="tipo-toggle">
             <button class="tipo-btn active-receita" id="btnReceita" onclick="setTipo('receita')">↑ Receita</button>
             <button class="tipo-btn" id="btnDespesa" onclick="setTipo('despesa')">↓ Despesa</button>
           </div>
-
           <div class="form-group">
             <label>Categoria</label>
             <input type="text" id="categoria" placeholder="Ex: Salário, iFood, Mercado">
@@ -539,229 +274,388 @@
               <input type="date" id="data">
             </div>
           </div>
-
           <button class="btn-salvar" id="btnSalvar" onclick="salvar()">Salvar Transação</button>
         </div>
       </div>
-
     </div>
   </div>
 </div>
 
-<script>
-let usuarioAtual = null;
-let transacoes = [];
-let tipoAtual = 'receita';
-let filtroAtual = 'todos';
-let editandoId = null;
-let grafico = null;
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import {
+    getAuth, GoogleAuthProvider, signInWithPopup,
+    createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    signOut, onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+  import {
+    getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where
+  } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-// set today as default date
-document.getElementById('data').valueAsDate = new Date();
+  const firebaseConfig = {
+    apiKey: "AIzaSyAhdcSuDS6_r_SjTHDOJBwA5hUBCvU--Sg",
+    authDomain: "financaspro1100.firebaseapp.com",
+    projectId: "financaspro1100",
+    storageBucket: "financaspro1100.firebasestorage.app",
+    messagingSenderId: "411300706683",
+    appId: "1:411300706683:web:f1913633000c7f538425de"
+  };
 
-function login() {
-  const user = document.getElementById('usuario').value.trim();
-  const senha = document.getElementById('senha').value;
-  if (!user || !senha) { showToast('Preencha usuário e senha'); return; }
+  const GEMINI_KEY = "AIzaSyBbjb3xGFZ-KtThUpqU43G6n_dS3wpRYSY";
+  const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + GEMINI_KEY;
 
-  usuarioAtual = user;
-  transacoes = JSON.parse(localStorage.getItem('fp_' + user) || '[]');
+  const fireApp = initializeApp(firebaseConfig);
+  const auth = getAuth(fireApp);
+  const db = getFirestore(fireApp);
+  const googleProvider = new GoogleAuthProvider();
 
-  document.getElementById('loginCard').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('nomeUsuario').textContent = user;
+  let transacoes = [], tipoAtual = 'receita', filtroAtual = 'todos', editandoId = null, grafico = null, uidAtual = null;
 
-  atualizar();
-}
+  // Expor funções globais
+  window.loginGoogle = loginGoogle;
+  window.trocarAba = trocarAba;
+  window.fazerLogin = fazerLogin;
+  window.fazerCadastro = fazerCadastro;
+  window.fazerLogout = fazerLogout;
+  window.setTipo = setTipo;
+  window.setFiltro = setFiltro;
+  window.salvar = salvar;
+  window.excluir = excluir;
+  window.editar = editar;
+  window.enviarParaIA = enviarParaIA;
+  window.usarExemplo = usarExemplo;
 
-function logout() {
-  usuarioAtual = null;
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('loginCard').style.display = 'flex';
-  document.getElementById('usuario').value = '';
-  document.getElementById('senha').value = '';
-}
-
-function setTipo(tipo) {
-  tipoAtual = tipo;
-  const btnR = document.getElementById('btnReceita');
-  const btnD = document.getElementById('btnDespesa');
-  btnR.className = 'tipo-btn' + (tipo === 'receita' ? ' active-receita' : '');
-  btnD.className = 'tipo-btn' + (tipo === 'despesa' ? ' active-despesa' : '');
-}
-
-function setFiltro(filtro, el) {
-  filtroAtual = filtro;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  renderLista();
-}
-
-function salvar() {
-  const categoria = document.getElementById('categoria').value.trim();
-  const descricao = document.getElementById('descricao').value.trim();
-  const valor = parseFloat(document.getElementById('valor').value);
-  const data = document.getElementById('data').value;
-
-  if (!valor || valor <= 0) { showToast('Insira um valor válido'); return; }
-  if (!categoria) { showToast('Informe uma categoria'); return; }
-
-  if (editandoId) {
-    transacoes = transacoes.filter(t => t.id !== editandoId);
-    editandoId = null;
-    document.getElementById('formTitle').textContent = 'Nova Transação';
-    document.getElementById('btnSalvar').textContent = 'Salvar Transação';
-  }
-
-  transacoes.unshift({ id: Date.now(), tipo: tipoAtual, categoria, descricao, valor, data });
-  salvarStorage();
-  limparForm();
-  atualizar();
-  showToast(tipoAtual === 'receita' ? 'Receita adicionada!' : 'Despesa adicionada!');
-}
-
-function salvarStorage() {
-  localStorage.setItem('fp_' + usuarioAtual, JSON.stringify(transacoes));
-}
-
-function limparForm() {
-  document.getElementById('categoria').value = '';
-  document.getElementById('descricao').value = '';
-  document.getElementById('valor').value = '';
-  document.getElementById('data').valueAsDate = new Date();
-}
-
-function excluir(id) {
-  if (!confirm('Excluir esta transação?')) return;
-  transacoes = transacoes.filter(t => t.id !== id);
-  salvarStorage();
-  atualizar();
-  showToast('Transação excluída');
-}
-
-function editar(id) {
-  const t = transacoes.find(t => t.id === id);
-  if (!t) return;
-  editandoId = id;
-  setTipo(t.tipo);
-  document.getElementById('categoria').value = t.categoria;
-  document.getElementById('descricao').value = t.descricao || '';
-  document.getElementById('valor').value = t.valor;
-  document.getElementById('data').value = t.data;
-  document.getElementById('formTitle').textContent = 'Editar Transação';
-  document.getElementById('btnSalvar').textContent = 'Atualizar';
-  document.querySelector('.content-grid').scrollIntoView({ behavior: 'smooth' });
-}
-
-function atualizar() {
-  let receita = 0, despesa = 0;
-  const categorias = {};
-
-  transacoes.forEach(t => {
-    if (t.tipo === 'receita') receita += t.valor;
-    if (t.tipo === 'despesa') {
-      despesa += t.valor;
-      categorias[t.categoria] = (categorias[t.categoria] || 0) + t.valor;
+  // Observador de autenticação
+  onAuthStateChanged(auth, async (user) => {
+    document.getElementById('loading').style.display = 'none';
+    if (user) {
+      uidAtual = user.uid;
+      document.getElementById('emailUsuario').textContent = user.displayName || user.email;
+      if (user.photoURL) {
+        const av = document.getElementById('avatarImg');
+        av.src = user.photoURL;
+        av.style.display = 'block';
+      }
+      document.getElementById('authCard').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      document.getElementById('data').valueAsDate = new Date();
+      await carregarTransacoes();
+    } else {
+      uidAtual = null;
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('authCard').style.display = 'flex';
     }
   });
 
-  const fmt = n => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  document.getElementById('totalReceita').textContent = fmt(receita);
-  document.getElementById('totalDespesa').textContent = fmt(despesa);
-  const saldo = receita - despesa;
-  document.getElementById('saldo').textContent = fmt(Math.abs(saldo));
-  const saldoEl = document.getElementById('saldo');
-  saldoEl.style.color = saldo < 0 ? 'var(--accent2)' : '';
-
-  renderLista();
-  renderGrafico(categorias);
-}
-
-function renderLista() {
-  const lista = document.getElementById('lista');
-  const filtered = filtroAtual === 'todos' ? transacoes : transacoes.filter(t => t.tipo === filtroAtual);
-
-  if (!filtered.length) {
-    lista.innerHTML = `<div class="empty-state"><div class="emoji">📊</div>Nenhuma transação encontrada.</div>`;
-    return;
+  async function loginGoogle() {
+    document.getElementById('authErro').textContent = '';
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch(e) {
+      document.getElementById('authErro').textContent = traduzirErro(e.code);
+    }
   }
 
-  const fmt = n => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('pt-BR') : '';
+  function trocarAba(aba) {
+    document.getElementById('formLogin').style.display = aba === 'login' ? 'block' : 'none';
+    document.getElementById('formCadastro').style.display = aba === 'cadastro' ? 'block' : 'none';
+    document.getElementById('tabLogin').className = 'auth-tab' + (aba === 'login' ? ' active' : '');
+    document.getElementById('tabCadastro').className = 'auth-tab' + (aba === 'cadastro' ? ' active' : '');
+    document.getElementById('authErro').textContent = '';
+  }
 
-  lista.innerHTML = filtered.map(t => `
-    <div class="transacao-item">
-      <div class="t-badge ${t.tipo}">${t.tipo === 'receita' ? '↑' : '↓'}</div>
-      <div class="t-info">
-        <div class="t-cat">${t.categoria}</div>
-        <div class="t-desc">${t.descricao || '—'}</div>
-      </div>
-      <div>
-        <div class="t-valor ${t.tipo}">R$ ${fmt(t.valor)}</div>
-        <div class="t-date">${fmtDate(t.data)}</div>
-      </div>
-      <div class="t-actions">
-        <button class="t-btn" onclick="editar(${t.id})">✎</button>
-        <button class="t-btn del" onclick="excluir(${t.id})">✕</button>
-      </div>
-    </div>
-  `).join('');
-}
+  async function fazerLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const senha = document.getElementById('loginSenha').value;
+    document.getElementById('authErro').textContent = '';
+    if (!email || !senha) { document.getElementById('authErro').textContent = 'Preencha email e senha.'; return; }
+    try { await signInWithEmailAndPassword(auth, email, senha); }
+    catch(e) { document.getElementById('authErro').textContent = traduzirErro(e.code); }
+  }
 
-function renderGrafico(categorias) {
-  const ctx = document.getElementById('grafico').getContext('2d');
-  if (grafico) grafico.destroy();
+  async function fazerCadastro() {
+    const email = document.getElementById('cadEmail').value.trim();
+    const senha = document.getElementById('cadSenha').value;
+    const senha2 = document.getElementById('cadSenha2').value;
+    document.getElementById('authErro').textContent = '';
+    if (!email || !senha) { document.getElementById('authErro').textContent = 'Preencha todos os campos.'; return; }
+    if (senha !== senha2) { document.getElementById('authErro').textContent = 'As senhas não coincidem.'; return; }
+    if (senha.length < 6) { document.getElementById('authErro').textContent = 'Senha mínima: 6 caracteres.'; return; }
+    try { await createUserWithEmailAndPassword(auth, email, senha); showToast('Conta criada!'); }
+    catch(e) { document.getElementById('authErro').textContent = traduzirErro(e.code); }
+  }
 
-  const keys = Object.keys(categorias);
-  if (!keys.length) return;
+  async function fazerLogout() {
+    await signOut(auth);
+    transacoes = [];
+    document.getElementById('avatarImg').style.display = 'none';
+  }
 
-  const colors = ['#00e5a0','#ff4d6d','#ffd166','#06d6a0','#ef476f','#ffd60a','#118ab2','#073b4c','#8ecae6','#219ebc'];
+  async function carregarTransacoes() {
+    try {
+      const q = query(collection(db, 'transacoes'), where('uid', '==', uidAtual));
+      const snap = await getDocs(q);
+      transacoes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      transacoes.sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0));
+      atualizar();
+    } catch(e) { showToast('Erro ao carregar dados.', 'erro'); }
+  }
 
-  grafico = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: keys,
-      datasets: [{
-        data: Object.values(categorias),
-        backgroundColor: colors.slice(0, keys.length),
-        borderWidth: 2,
-        borderColor: '#111418',
-        hoverOffset: 6
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'right',
-          labels: {
-            color: '#5a6370',
-            font: { family: 'DM Mono', size: 11 },
-            boxWidth: 12,
-            padding: 12
+  async function salvar(dadosIA = null) {
+    const categoria = dadosIA ? dadosIA.categoria : document.getElementById('categoria').value.trim();
+    const descricao = dadosIA ? (dadosIA.descricao || '') : document.getElementById('descricao').value.trim();
+    const valor = dadosIA ? parseFloat(dadosIA.valor) : parseFloat(document.getElementById('valor').value);
+    const data = dadosIA ? dadosIA.data : document.getElementById('data').value;
+    const tipo = dadosIA ? dadosIA.tipo : tipoAtual;
+
+    if (!valor || valor <= 0) { if (!dadosIA) showToast('Insira um valor válido', 'erro'); return false; }
+    if (!categoria) { if (!dadosIA) showToast('Informe uma categoria', 'erro'); return false; }
+
+    const item = { uid: uidAtual, tipo, categoria, descricao, valor, data, criadoEm: Date.now() };
+    try {
+      if (editandoId && !dadosIA) {
+        await deleteDoc(doc(db, 'transacoes', editandoId));
+        transacoes = transacoes.filter(t => t.id !== editandoId);
+        editandoId = null;
+        document.getElementById('formTitle').textContent = 'Nova Transação';
+        document.getElementById('btnSalvar').textContent = 'Salvar Transação';
+      }
+      const ref = await addDoc(collection(db, 'transacoes'), item);
+      transacoes.unshift({ id: ref.id, ...item });
+      if (!dadosIA) limparForm();
+      atualizar();
+      return true;
+    } catch(e) { showToast('Erro ao salvar.', 'erro'); return false; }
+  }
+
+  async function excluir(id) {
+    if (!confirm('Excluir esta transação?')) return;
+    try {
+      await deleteDoc(doc(db, 'transacoes', id));
+      transacoes = transacoes.filter(t => t.id !== id);
+      atualizar(); showToast('Transação excluída');
+    } catch(e) { showToast('Erro ao excluir.', 'erro'); }
+  }
+
+  function editar(id) {
+    const t = transacoes.find(t => t.id === id);
+    if (!t) return;
+    editandoId = id; setTipo(t.tipo);
+    document.getElementById('categoria').value = t.categoria;
+    document.getElementById('descricao').value = t.descricao || '';
+    document.getElementById('valor').value = t.valor;
+    document.getElementById('data').value = t.data;
+    document.getElementById('formTitle').textContent = 'Editar Transação';
+    document.getElementById('btnSalvar').textContent = 'Atualizar';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ---- GEMINI ----
+  function usarExemplo(el) {
+    document.getElementById('aiInput').value = el.textContent;
+    document.getElementById('aiInput').focus();
+  }
+
+  async function enviarParaIA() {
+    const input = document.getElementById('aiInput').value.trim();
+    if (!input) return;
+
+    const btn = document.getElementById('btnAI');
+    const respDiv = document.getElementById('aiResponse');
+    btn.disabled = true; btn.textContent = '...';
+    respDiv.className = 'ai-response visible';
+    respDiv.innerHTML = '<div class="ai-thinking">Gemini pensando <div class="ai-dots"><span></span><span></span><span></span></div></div>';
+
+    const hoje = new Date().toISOString().split('T')[0];
+    const totalR = transacoes.filter(t => t.tipo === 'receita').reduce((s, t) => s + t.valor, 0);
+    const totalD = transacoes.filter(t => t.tipo === 'despesa').reduce((s, t) => s + t.valor, 0);
+    const resumo = transacoes.slice(0, 25).map(t => `${t.tipo}|${t.categoria}|R$${t.valor}|${t.data}`).join('\n');
+
+    const prompt = `Você é um assistente financeiro pessoal integrado ao FinançasPRO. Responda SEMPRE em português brasileiro.
+
+DADOS DO USUÁRIO:
+- Hoje: ${hoje}
+- Total Receitas: R$ ${totalR.toFixed(2)}
+- Total Despesas: R$ ${totalD.toFixed(2)}
+- Saldo atual: R$ ${(totalR - totalD).toFixed(2)}
+Últimas transações (tipo|categoria|valor|data):
+${resumo || 'Nenhuma transação ainda.'}
+
+INSTRUÇÕES IMPORTANTES:
+1. Se o usuário quiser ADICIONAR uma transação (gastei, paguei, recebi, comprei, ganhei, etc.), responda APENAS com um JSON válido neste formato exato, sem texto antes ou depois:
+{"acao":"adicionar","tipo":"despesa","categoria":"Alimentação","descricao":"iFood","valor":45.00,"data":"${hoje}","resposta":"Despesa de R$ 45,00 no iFood adicionada!"}
+
+2. Se for uma PERGUNTA sobre finanças, responda em texto simples, claro e útil em português.
+
+3. Para dúvidas, peça esclarecimento de forma simpática.
+
+MENSAGEM DO USUÁRIO: "${input}"`;
+
+    try {
+      const res = await fetch(GEMINI_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.3 }
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        respDiv.innerHTML = '⚠️ Erro da API: ' + (err.error?.message || 'Tente novamente.');
+        btn.disabled = false; btn.textContent = '✦ Enviar';
+        return;
+      }
+
+      const data = await res.json();
+      const texto = (data.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
+
+      // Tenta extrair JSON
+      const jsonMatch = texto.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        try {
+          const obj = JSON.parse(jsonMatch[0]);
+          if (obj.acao === 'adicionar' && obj.valor && obj.categoria) {
+            const ok = await salvar({
+              tipo: obj.tipo || 'despesa',
+              categoria: obj.categoria,
+              descricao: obj.descricao || input,
+              valor: parseFloat(obj.valor),
+              data: obj.data || hoje
+            });
+            respDiv.innerHTML = ok
+              ? '✦ ' + (obj.resposta || 'Transação adicionada com sucesso!')
+              : '⚠️ Não consegui salvar. Tente novamente.';
+            if (ok) showToast('Gemini adicionou a transação!', 'ia');
+          } else {
+            respDiv.innerHTML = texto.replace(/\n/g, '<br>');
           }
-        },
-        tooltip: {
-          callbacks: {
-            label: ctx => ` R$ ${ctx.raw.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
-          }
+        } catch {
+          respDiv.innerHTML = texto.replace(/\n/g, '<br>');
         }
-      },
-      cutout: '60%'
-    }
-  });
-}
+      } else {
+        respDiv.innerHTML = texto.replace(/\n/g, '<br>');
+      }
 
-function showToast(msg) {
-  const old = document.querySelector('.toast');
-  if (old) old.remove();
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = msg;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 2800);
-}
+      document.getElementById('aiInput').value = '';
+    } catch(e) {
+      respDiv.innerHTML = '⚠️ Erro de conexão com o Gemini. Verifique sua internet.';
+    }
+
+    btn.disabled = false; btn.textContent = '✦ Enviar';
+  }
+
+  // ---- UTILS ----
+  function setTipo(tipo) {
+    tipoAtual = tipo;
+    document.getElementById('btnReceita').className = 'tipo-btn' + (tipo === 'receita' ? ' active-receita' : '');
+    document.getElementById('btnDespesa').className = 'tipo-btn' + (tipo === 'despesa' ? ' active-despesa' : '');
+  }
+
+  function setFiltro(filtro, el) {
+    filtroAtual = filtro;
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    renderLista();
+  }
+
+  function limparForm() {
+    document.getElementById('categoria').value = '';
+    document.getElementById('descricao').value = '';
+    document.getElementById('valor').value = '';
+    document.getElementById('data').valueAsDate = new Date();
+  }
+
+  function atualizar() {
+    let receita = 0, despesa = 0;
+    const categorias = {};
+    transacoes.forEach(t => {
+      if (t.tipo === 'receita') receita += t.valor;
+      if (t.tipo === 'despesa') { despesa += t.valor; categorias[t.categoria] = (categorias[t.categoria] || 0) + t.valor; }
+    });
+    const fmt = n => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('totalReceita').textContent = fmt(receita);
+    document.getElementById('totalDespesa').textContent = fmt(despesa);
+    const saldo = receita - despesa;
+    const saldoEl = document.getElementById('saldo');
+    saldoEl.textContent = fmt(Math.abs(saldo));
+    saldoEl.style.color = saldo < 0 ? 'var(--accent2)' : '';
+    renderLista();
+    renderGrafico(categorias);
+  }
+
+  function renderLista() {
+    const lista = document.getElementById('lista');
+    const filtered = filtroAtual === 'todos' ? transacoes : transacoes.filter(t => t.tipo === filtroAtual);
+    if (!filtered.length) {
+      lista.innerHTML = '<div class="empty-state"><div class="emoji">📊</div>Nenhuma transação ainda.<br>Use o formulário ou peça ao Gemini!</div>';
+      return;
+    }
+    const fmt = n => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('pt-BR') : '';
+    lista.innerHTML = filtered.map(t => `
+      <div class="transacao-item">
+        <div class="t-badge ${t.tipo}">${t.tipo === 'receita' ? '↑' : '↓'}</div>
+        <div class="t-info">
+          <div class="t-cat">${t.categoria}</div>
+          <div class="t-desc">${t.descricao || '—'}</div>
+        </div>
+        <div>
+          <div class="t-valor ${t.tipo}">R$ ${fmt(t.valor)}</div>
+          <div class="t-date">${fmtDate(t.data)}</div>
+        </div>
+        <div class="t-actions">
+          <button class="t-btn" onclick="editar('${t.id}')">✎</button>
+          <button class="t-btn del" onclick="excluir('${t.id}')">✕</button>
+        </div>
+      </div>`).join('');
+  }
+
+  function renderGrafico(categorias) {
+    const ctx = document.getElementById('grafico').getContext('2d');
+    if (grafico) grafico.destroy();
+    const keys = Object.keys(categorias);
+    if (!keys.length) return;
+    const colors = ['#00e5a0','#ff4d6d','#ffd166','#a78bfa','#06d6a0','#60a5fa','#ef476f','#ffd60a','#8ecae6','#219ebc'];
+    grafico = new Chart(ctx, {
+      type: 'doughnut',
+      data: { labels: keys, datasets: [{ data: Object.values(categorias), backgroundColor: colors.slice(0, keys.length), borderWidth: 2, borderColor: '#111418', hoverOffset: 6 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'right', labels: { color: '#5a6370', font: { family: 'DM Mono', size: 11 }, boxWidth: 12, padding: 12 } },
+          tooltip: { callbacks: { label: ctx => ` R$ ${ctx.raw.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` } }
+        },
+        cutout: '60%'
+      }
+    });
+  }
+
+  function traduzirErro(code) {
+    const erros = {
+      'auth/user-not-found': 'Usuário não encontrado.',
+      'auth/wrong-password': 'Senha incorreta.',
+      'auth/invalid-email': 'Email inválido.',
+      'auth/email-already-in-use': 'Este email já está cadastrado.',
+      'auth/weak-password': 'Senha muito fraca.',
+      'auth/invalid-credential': 'Email ou senha incorretos.',
+      'auth/too-many-requests': 'Muitas tentativas. Tente mais tarde.',
+      'auth/network-request-failed': 'Erro de conexão.',
+      'auth/popup-closed-by-user': 'Login cancelado.',
+      'auth/cancelled-popup-request': 'Login cancelado.',
+    };
+    return erros[code] || 'Ocorreu um erro. Tente novamente.';
+  }
+
+  function showToast(msg, tipo = '') {
+    const old = document.querySelector('.toast'); if (old) old.remove();
+    const toast = document.createElement('div');
+    toast.className = 'toast' + (tipo ? ' ' + tipo : '');
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
 </script>
 </body>
 </html>
