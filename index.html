@@ -14,10 +14,12 @@
     --accent3: #ffd166; --accent4: #a78bfa; --text: #e8ecf0; --muted: #5a6370; --radius: 12px;
   }
   body { font-family: 'DM Mono', monospace; background: var(--bg); color: var(--text); min-height: 100vh; }
+
   .loading-overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 16px; }
   .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
   .loading-text { font-size: 13px; color: var(--muted); }
 
+  /* ---- AUTH ---- */
   #authCard { min-height: 100vh; display: none; align-items: center; justify-content: center; background: var(--bg); position: relative; overflow: hidden; }
   #authCard::before { content: ''; position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,229,160,0.08) 0%, transparent 70%); top: -150px; left: -150px; pointer-events: none; }
   #authCard::after { content: ''; position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(167,139,250,0.06) 0%, transparent 70%); bottom: -100px; right: -100px; pointer-events: none; }
@@ -39,10 +41,18 @@
   .auth-box label { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
   .auth-box input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 14px; padding: 12px 14px; margin-bottom: 14px; outline: none; transition: border-color 0.2s; }
   .auth-box input:focus { border-color: var(--accent); }
-  .btn-auth { width: 100%; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; padding: 13px; cursor: pointer; transition: opacity 0.2s; margin-top: 2px; }
+
+  /* Visualizador de senha */
+  .pass-wrap { position: relative; margin-bottom: 14px; }
+  .pass-wrap input { width: 100%; margin-bottom: 0; padding-right: 44px; }
+  .pass-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); font-size: 18px; line-height: 1; transition: color 0.2s; padding: 4px; }
+  .pass-toggle:hover { color: var(--accent); }
+
+  .btn-auth { width: 100%; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; padding: 13px; cursor: pointer; transition: opacity 0.2s; margin-top: 6px; }
   .btn-auth:hover { opacity: 0.85; }
   .auth-error { color: var(--accent2); font-size: 12px; margin-top: 10px; text-align: center; min-height: 16px; }
 
+  /* ---- APP ---- */
   #app { display: none; }
   .topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 100; }
   .topbar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--accent); letter-spacing: -1px; }
@@ -54,6 +64,7 @@
 
   .main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
 
+  /* ---- GEMINI BAR ---- */
   .ai-bar { background: var(--surface); border: 1px solid var(--accent4); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 24px; position: relative; overflow: hidden; }
   .ai-bar::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(167,139,250,0.04) 0%, transparent 60%); pointer-events: none; }
   .ai-bar-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
@@ -75,6 +86,7 @@
   .ai-dots span { display: inline-block; width: 5px; height: 5px; background: var(--accent4); border-radius: 50%; animation: bounce 1s infinite; }
   .ai-dots span:nth-child(2) { animation-delay: 0.15s; } .ai-dots span:nth-child(3) { animation-delay: 0.3s; }
 
+  /* ---- SUMMARY ---- */
   .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
   .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; position: relative; overflow: hidden; transition: transform 0.2s; }
   .summary-card:hover { transform: translateY(-2px); }
@@ -85,6 +97,7 @@
   .summary-card.receitas .summary-value { color: var(--accent); } .summary-card.despesas .summary-value { color: var(--accent2); } .summary-card.saldo .summary-value { color: var(--accent3); }
   .summary-icon { position: absolute; right: 20px; top: 20px; font-size: 28px; opacity: 0.12; }
 
+  /* ---- LAYOUT ---- */
   .content-grid { display: grid; grid-template-columns: 1fr 380px; gap: 20px; align-items: start; }
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
   .card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 20px; color: var(--text); }
@@ -93,12 +106,16 @@
   .form-group label { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
   .form-group input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; padding: 10px 12px; outline: none; transition: border-color 0.2s; }
   .form-group input:focus { border-color: var(--accent); }
+
   .tipo-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
   .tipo-btn { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
   .tipo-btn.active-receita { background: rgba(0,229,160,0.12); border-color: var(--accent); color: var(--accent); }
   .tipo-btn.active-despesa { background: rgba(255,77,109,0.12); border-color: var(--accent2); color: var(--accent2); }
+
   .btn-salvar { width: 100%; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; padding: 13px; cursor: pointer; transition: opacity 0.2s; margin-top: 4px; }
   .btn-salvar:hover { opacity: 0.85; }
+
+  /* ---- LISTA ---- */
   .lista-wrapper { max-height: 420px; overflow-y: auto; }
   .lista-wrapper::-webkit-scrollbar { width: 4px; } .lista-wrapper::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
   .transacao-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); animation: slideUp 0.3s ease; }
@@ -114,12 +131,15 @@
   .t-actions { display: flex; gap: 6px; }
   .t-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--muted); font-size: 12px; padding: 5px 9px; cursor: pointer; transition: all 0.15s; }
   .t-btn:hover { color: var(--text); border-color: var(--text); } .t-btn.del:hover { color: var(--accent2); border-color: var(--accent2); }
+
   .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; }
   .empty-state .emoji { font-size: 36px; margin-bottom: 12px; }
   .chart-container { position: relative; height: 240px; }
   .filter-row { display: flex; gap: 8px; margin-bottom: 16px; }
   .filter-chip { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 20px; font-family: 'DM Mono', monospace; font-size: 11px; padding: 5px 12px; cursor: pointer; transition: all 0.15s; }
   .filter-chip.active { background: rgba(0,229,160,0.12); border-color: var(--accent); color: var(--accent); }
+
+  /* ---- TOAST ---- */
   .toast { position: fixed; bottom: 28px; right: 28px; background: var(--surface2); border: 1px solid var(--accent); border-radius: 10px; padding: 14px 20px; font-size: 13px; color: var(--accent); z-index: 9999; animation: slideUp 0.3s ease; box-shadow: 0 8px 32px rgba(0,229,160,0.15); }
   .toast.erro { border-color: var(--accent2); color: var(--accent2); box-shadow: none; }
   .toast.ia { border-color: var(--accent4); color: var(--accent4); box-shadow: none; }
@@ -149,7 +169,12 @@
     <div class="auth-sub">Controle financeiro com IA 🤖</div>
 
     <button class="btn-google" onclick="loginGoogle()">
-      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
       Entrar com Google
     </button>
 
@@ -160,21 +185,32 @@
       <button class="auth-tab" id="tabCadastro" onclick="trocarAba('cadastro')">Criar conta</button>
     </div>
 
+    <!-- FORM LOGIN -->
     <div id="formLogin">
       <label>Email</label>
       <input type="email" id="loginEmail" placeholder="seu@email.com">
       <label>Senha</label>
-      <input type="password" id="loginSenha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()">
+      <div class="pass-wrap">
+        <input type="password" id="loginSenha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()">
+        <button class="pass-toggle" onclick="toggleSenha('loginSenha', this)" tabindex="-1">👁</button>
+      </div>
       <button class="btn-auth" onclick="fazerLogin()">Entrar →</button>
     </div>
 
+    <!-- FORM CADASTRO -->
     <div id="formCadastro" style="display:none;">
       <label>Email</label>
       <input type="email" id="cadEmail" placeholder="seu@email.com">
       <label>Senha (mín. 6 caracteres)</label>
-      <input type="password" id="cadSenha" placeholder="••••••••">
+      <div class="pass-wrap">
+        <input type="password" id="cadSenha" placeholder="••••••••">
+        <button class="pass-toggle" onclick="toggleSenha('cadSenha', this)" tabindex="-1">👁</button>
+      </div>
       <label>Confirmar senha</label>
-      <input type="password" id="cadSenha2" placeholder="••••••••">
+      <div class="pass-wrap">
+        <input type="password" id="cadSenha2" placeholder="••••••••">
+        <button class="pass-toggle" onclick="toggleSenha('cadSenha2', this)" tabindex="-1">👁</button>
+      </div>
       <button class="btn-auth" onclick="fazerCadastro()">Criar conta →</button>
     </div>
 
@@ -194,6 +230,8 @@
   </div>
 
   <div class="main">
+
+    <!-- GEMINI -->
     <div class="ai-bar">
       <div class="ai-bar-header">
         <div class="ai-badge">✦ GEMINI</div>
@@ -215,6 +253,7 @@
       <div class="ai-response" id="aiResponse"></div>
     </div>
 
+    <!-- RESUMO -->
     <div class="summary-grid">
       <div class="summary-card receitas">
         <div class="summary-icon">↑</div>
@@ -249,6 +288,7 @@
           <div class="chart-container"><canvas id="grafico"></canvas></div>
         </div>
       </div>
+
       <div>
         <div class="card" style="position:sticky;top:80px;">
           <div class="card-title" id="formTitle">Nova Transação</div>
@@ -281,6 +321,16 @@
   </div>
 </div>
 
+<script>
+  // Visualizador de senha
+  function toggleSenha(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const mostrar = input.type === 'password';
+    input.type = mostrar ? 'text' : 'password';
+    btn.textContent = mostrar ? '🙈' : '👁';
+  }
+</script>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
   import {
@@ -292,8 +342,9 @@
     getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where
   } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
+ 
   const firebaseConfig = {
-    apiKey: "AIzaSyAhdcSuDS6_r_SjTHDOJBwA5hUBCvU--Sg",
+    apiKey: "AIzaSyC7PA3kTiiL3KMK1AGe8wtcOe-T46dJWrg",
     authDomain: "financaspro1100.firebaseapp.com",
     projectId: "financaspro1100",
     storageBucket: "financaspro1100.firebasestorage.app",
@@ -301,17 +352,17 @@
     appId: "1:411300706683:web:f1913633000c7f538425de"
   };
 
-  const GEMINI_KEY = "AIzaSyBbjb3xGFZ-KtThUpqU43G6n_dS3wpRYSY";
-  const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + GEMINI_KEY;
+  const GEMINI_KEY = "AIzaSyC7PA3kTiiL3KMK1AGe8wtcOe-T46dJWrg"; 
+  const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent?key=" + GEMINI_KEY;
 
   const fireApp = initializeApp(firebaseConfig);
   const auth = getAuth(fireApp);
   const db = getFirestore(fireApp);
   const googleProvider = new GoogleAuthProvider();
 
-  let transacoes = [], tipoAtual = 'receita', filtroAtual = 'todos', editandoId = null, grafico = null, uidAtual = null;
+  let transacoes = [], tipoAtual = 'receita', filtroAtual = 'todos';
+  let editandoId = null, grafico = null, uidAtual = null;
 
-  // Expor funções globais
   window.loginGoogle = loginGoogle;
   window.trocarAba = trocarAba;
   window.fazerLogin = fazerLogin;
@@ -349,11 +400,8 @@
 
   async function loginGoogle() {
     document.getElementById('authErro').textContent = '';
-    try {
-      await signInWithPopup(auth, googleProvider);
-    } catch(e) {
-      document.getElementById('authErro').textContent = traduzirErro(e.code);
-    }
+    try { await signInWithPopup(auth, googleProvider); }
+    catch(e) { document.getElementById('authErro').textContent = traduzirErro(e.code); }
   }
 
   function trocarAba(aba) {
@@ -381,7 +429,7 @@
     if (!email || !senha) { document.getElementById('authErro').textContent = 'Preencha todos os campos.'; return; }
     if (senha !== senha2) { document.getElementById('authErro').textContent = 'As senhas não coincidem.'; return; }
     if (senha.length < 6) { document.getElementById('authErro').textContent = 'Senha mínima: 6 caracteres.'; return; }
-    try { await createUserWithEmailAndPassword(auth, email, senha); showToast('Conta criada!'); }
+    try { await createUserWithEmailAndPassword(auth, email, senha); showToast('Conta criada com sucesso!'); }
     catch(e) { document.getElementById('authErro').textContent = traduzirErro(e.code); }
   }
 
@@ -460,6 +508,12 @@
     const input = document.getElementById('aiInput').value.trim();
     if (!input) return;
 
+    if (GEMINI_KEY === 'SUA_CHAVE_GEMINI_AQUI') {
+      document.getElementById('aiResponse').className = 'ai-response visible';
+      document.getElementById('aiResponse').innerHTML = '⚠️ Insira sua chave do Gemini no arquivo (procure por SUA_CHAVE_GEMINI_AQUI).';
+      return;
+    }
+
     const btn = document.getElementById('btnAI');
     const respDiv = document.getElementById('aiResponse');
     btn.disabled = true; btn.textContent = '...';
@@ -471,7 +525,7 @@
     const totalD = transacoes.filter(t => t.tipo === 'despesa').reduce((s, t) => s + t.valor, 0);
     const resumo = transacoes.slice(0, 25).map(t => `${t.tipo}|${t.categoria}|R$${t.valor}|${t.data}`).join('\n');
 
-    const prompt = `Você é um assistente financeiro pessoal integrado ao FinançasPRO. Responda SEMPRE em português brasileiro.
+    const prompt = `Você é um assistente financeiro pessoal integrado ao FinançasPRO. Responda SEMPRE em português brasileiro de forma simples e direta.
 
 DADOS DO USUÁRIO:
 - Hoje: ${hoje}
@@ -481,15 +535,15 @@ DADOS DO USUÁRIO:
 Últimas transações (tipo|categoria|valor|data):
 ${resumo || 'Nenhuma transação ainda.'}
 
-INSTRUÇÕES IMPORTANTES:
-1. Se o usuário quiser ADICIONAR uma transação (gastei, paguei, recebi, comprei, ganhei, etc.), responda APENAS com um JSON válido neste formato exato, sem texto antes ou depois:
+INSTRUÇÕES:
+1. Se o usuário quiser ADICIONAR uma transação (gastei, paguei, recebi, comprei, ganhei, etc.), responda APENAS com este JSON válido, sem nenhum texto antes ou depois:
 {"acao":"adicionar","tipo":"despesa","categoria":"Alimentação","descricao":"iFood","valor":45.00,"data":"${hoje}","resposta":"Despesa de R$ 45,00 no iFood adicionada!"}
 
-2. Se for uma PERGUNTA sobre finanças, responda em texto simples, claro e útil em português.
+2. Se for PERGUNTA sobre finanças, responda em texto simples e útil.
 
-3. Para dúvidas, peça esclarecimento de forma simpática.
+3. Se não entender, peça esclarecimento.
 
-MENSAGEM DO USUÁRIO: "${input}"`;
+MENSAGEM: "${input}"`;
 
     try {
       const res = await fetch(GEMINI_URL, {
@@ -497,13 +551,13 @@ MENSAGEM DO USUÁRIO: "${input}"`;
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.3 }
+          generationConfig: { temperature: 0.2 }
         })
       });
 
       if (!res.ok) {
         const err = await res.json();
-        respDiv.innerHTML = '⚠️ Erro da API: ' + (err.error?.message || 'Tente novamente.');
+        respDiv.innerHTML = '⚠️ Erro da API: ' + (err.error?.message || 'Verifique sua chave do Gemini.');
         btn.disabled = false; btn.textContent = '✦ Enviar';
         return;
       }
@@ -511,8 +565,7 @@ MENSAGEM DO USUÁRIO: "${input}"`;
       const data = await res.json();
       const texto = (data.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
 
-      // Tenta extrair JSON
-      const jsonMatch = texto.match(/\{[\s\S]*\}/);
+      const jsonMatch = texto.match(/\{[\s\S]*?\}/);
       if (jsonMatch) {
         try {
           const obj = JSON.parse(jsonMatch[0]);
@@ -525,22 +578,20 @@ MENSAGEM DO USUÁRIO: "${input}"`;
               data: obj.data || hoje
             });
             respDiv.innerHTML = ok
-              ? '✦ ' + (obj.resposta || 'Transação adicionada com sucesso!')
+              ? '✦ ' + (obj.resposta || 'Transação adicionada!')
               : '⚠️ Não consegui salvar. Tente novamente.';
             if (ok) showToast('Gemini adicionou a transação!', 'ia');
           } else {
             respDiv.innerHTML = texto.replace(/\n/g, '<br>');
           }
-        } catch {
-          respDiv.innerHTML = texto.replace(/\n/g, '<br>');
-        }
+        } catch { respDiv.innerHTML = texto.replace(/\n/g, '<br>'); }
       } else {
         respDiv.innerHTML = texto.replace(/\n/g, '<br>');
       }
 
       document.getElementById('aiInput').value = '';
     } catch(e) {
-      respDiv.innerHTML = '⚠️ Erro de conexão com o Gemini. Verifique sua internet.';
+      respDiv.innerHTML = '⚠️ Erro de conexão. Verifique sua internet.';
     }
 
     btn.disabled = false; btn.textContent = '✦ Enviar';
@@ -556,8 +607,7 @@ MENSAGEM DO USUÁRIO: "${input}"`;
   function setFiltro(filtro, el) {
     filtroAtual = filtro;
     document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    renderLista();
+    el.classList.add('active'); renderLista();
   }
 
   function limparForm() {
@@ -581,8 +631,7 @@ MENSAGEM DO USUÁRIO: "${input}"`;
     const saldoEl = document.getElementById('saldo');
     saldoEl.textContent = fmt(Math.abs(saldo));
     saldoEl.style.color = saldo < 0 ? 'var(--accent2)' : '';
-    renderLista();
-    renderGrafico(categorias);
+    renderLista(); renderGrafico(categorias);
   }
 
   function renderLista() {
@@ -644,8 +693,9 @@ MENSAGEM DO USUÁRIO: "${input}"`;
       'auth/network-request-failed': 'Erro de conexão.',
       'auth/popup-closed-by-user': 'Login cancelado.',
       'auth/cancelled-popup-request': 'Login cancelado.',
+      'auth/unauthorized-domain': 'Domínio não autorizado. Adicione hektormbitty-commits.github.io no Firebase.',
     };
-    return erros[code] || 'Ocorreu um erro. Tente novamente.';
+    return erros[code] || 'Erro: ' + code;
   }
 
   function showToast(msg, tipo = '') {
